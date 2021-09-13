@@ -36,4 +36,4 @@ Properties are contained in the `src/main/resources` directory.
 * Include New Relic synthetic Javascript
 * Improve logging
 * Document deployment information
-* Document dependencies (new relic, logging, spring boot, etc)
+* Document dependencies (new relic, logging, spring boot/spring initializr, etc)
