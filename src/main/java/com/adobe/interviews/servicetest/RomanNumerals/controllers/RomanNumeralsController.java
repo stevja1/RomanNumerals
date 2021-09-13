@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RomanNumeralsController {
-    @GetMapping("/romannumerals")
+    @GetMapping("/romannumeral")
     @Operation(
             summary = "Converts a provided decimal number into a Roman numeral."
     )
-    public String getRomanNumerals(@RequestParam(value ="Input decimal number", defaultValue="3999") int number) {
+    public String getRomanNumerals(@RequestParam(value ="query", defaultValue="3999") int number) {
         return RomanNumeralsService.convertNumber(number);
     }
 }
