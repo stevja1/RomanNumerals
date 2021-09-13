@@ -18,15 +18,32 @@ public class RomanNumeralsController {
         return "";
     }
 
-    public static String convertNumber(int number) {
-        Map<Integer,String> map = new HashMap();
-        map.put(1, "I");
-//        map.put(5, "V");
-        map.put(2, "X");
+    /**
+     * Convert a decimal to Roman numeral. Can be used for numbers above zero and below 3999.
+     * @param number The number to convert
+     * @return The Roman numeral representation of the number
+     * @throws ArithmeticException Thrown if the number provided is below 1 or greater than 3999
+     */
+    public static String convertNumber(int number) throws ArithmeticException {
+        if(number < 1 || number > 3999) {
+            throw new ArithmeticException("Number "+number+" is out of bounds. Number must be above 0 and below 4000.");
+        }
+
+        Map<String,String> map = new HashMap();
+        map.put("1", "I");
+        map.put("1.5", "V");
+        map.put("2", "X");
 //        map.put(50, "L");
-        map.put(3, "C");
-//        map.put(500, "D");
-        map.put(4, "M");
+        map.put("3.1", "C");
+        map.put("3.2", "CC");
+        map.put("3.3", "CCC");
+        map.put("3.4", "CD");
+        map.put("3.5", "D");
+        map.put("3.6", "DC");
+        map.put("3.7", "DCC");
+        map.put("3.8", "DCCC");
+        map.put("3.9", "CM");
+        map.put("4", "M");
 
         int digit = 0;
         Stack<Integer> digits = new Stack();
@@ -35,8 +52,13 @@ public class RomanNumeralsController {
             digits.push(digit);
         }
 
+        int index = digits.size();
         while(digits.size() > 0) {
-            System.out.print(digits.pop());
+            digit = digits.pop();
+            if(digit < 4) {
+
+            }
+            --index;
         }
         return "";
     }

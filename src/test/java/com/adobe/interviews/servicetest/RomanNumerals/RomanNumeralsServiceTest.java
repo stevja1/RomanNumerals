@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class RomanNumeralsServiceTest {
     @Test
     public void convertNumberTest() {
-        RomanNumeralsController.convertNumber(123);
-        RomanNumeralsController.convertNumber(10011);
+        RomanNumeralsController.convertNumber(123); // CXXIII
+        RomanNumeralsController.convertNumber(492); // CDXCII
     }
 }
