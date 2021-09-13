@@ -1,8 +1,15 @@
 package com.adobe.interviews.servicetest.RomanNumerals.services;
 
+import com.adobe.interviews.servicetest.RomanNumerals.controllers.pojos.InvalidIndexException;
+import com.adobe.interviews.servicetest.RomanNumerals.controllers.pojos.RomanNumeralException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+@Slf4j
 public class RomanNumeralsService {
     private static final Map<String,String> numeralMap = new HashMap<>();
 
@@ -21,6 +28,7 @@ public class RomanNumeralsService {
             numeralMap.put("1.7", "VII");
             numeralMap.put("1.8", "VIII");
             numeralMap.put("1.9", "IX");
+            numeralMap.put("2.0", "");
             numeralMap.put("2.1", "X");
             numeralMap.put("2.2", "XX");
             numeralMap.put("2.3", "XXX");
@@ -30,6 +38,7 @@ public class RomanNumeralsService {
             numeralMap.put("2.7", "LXX");
             numeralMap.put("2.8", "LXXX");
             numeralMap.put("2.9", "XC");
+            numeralMap.put("3.0", "");
             numeralMap.put("3.1", "C");
             numeralMap.put("3.2", "CC");
             numeralMap.put("3.3", "CCC");
@@ -52,7 +61,7 @@ public class RomanNumeralsService {
      *              class for more details.
      * @return String|null Null on match failure. String containing value on success.
      */
-    private static String getMapValue(String index) {
+    private static String getMapValue(final String index) {
         initializeMap();
         return numeralMap.get(index);
     }
@@ -61,18 +70,20 @@ public class RomanNumeralsService {
      * Convert a decimal to Roman numeral. Can be used for numbers above zero and below 3999.
      * @param number The number to convert
      * @return The Roman numeral representation of the number
-     * @throws ArithmeticException Thrown if the number provided is below 1 or greater than 3999
-     * @throws StringIndexOutOfBoundsException Thrown if internally, a map index is generated that doesn't match any
-     * in the pre-defined list in this class.
+     * @throws RomanNumeralException Thrown if the number provided is below 1 or greater than 3999 or if a map index is
+     * generated that doesn't match any in the pre-defined list in this class.
      */
-    public static String convertNumber(int number) throws ArithmeticException {
+    public static String convertNumber(int number) throws RomanNumeralException, InvalidIndexException {
         if(number < 1 || number > 3999) {
-            throw new ArithmeticException("Number "+number+" isn't supported. Number must be above 0 and below 4000.");
+            String errorMessage = String.format("Number %d isn't supported. Number must be above 0 and below 4000.", number);
+            log.info(errorMessage);
+            throw new RomanNumeralException(errorMessage);
         }
 
         int digit;
         int index = 1;
-        String numeral = "";
+        StringBuilder numeral = new StringBuilder();
+        String numeralBuffer;
         String mapIndex;
         while(number > 0) {
             // Isolate the right-most digit
@@ -81,12 +92,16 @@ public class RomanNumeralsService {
             number = (int)Math.floor(number / 10);
             // Find the appropriate Roman numeral for this digit
             mapIndex = String.format("%d.%d", index, digit);
-            numeral = getMapValue(mapIndex) + numeral;
-            if(numeral == null) {
-                throw new StringIndexOutOfBoundsException("No entry found for index: "+mapIndex);
+            numeralBuffer = getMapValue(mapIndex);
+            // Somebody might change something someday that breaks the map. If that happens, let's log something useful.
+            if(numeralBuffer == null) {
+                UUID errorId = UUID.randomUUID();
+                log.error("Error ID: {}, No entry found for index: {}", errorId, mapIndex);
+                throw new InvalidIndexException("There was an internal problem that occurred during Roman numeral conversion. Error ID: "+errorId);
             }
+            numeral.insert(0, numeralBuffer);
             ++index;
         }
-        return numeral;
+        return numeral.toString();
     }
 }
