@@ -26,10 +26,11 @@ public class RomanNumeralsController {
      */
     public static String convertNumber(int number) throws ArithmeticException {
         if(number < 1 || number > 3999) {
-            throw new ArithmeticException("Number "+number+" is out of bounds. Number must be above 0 and below 4000.");
+            throw new ArithmeticException("Number "+number+" isn't supported. Number must be above 0 and below 4000.");
         }
 
         Map<String,String> map = new HashMap();
+        map.put("1.0", "");
         map.put("1.1", "I");
         map.put("1.2", "II");
         map.put("1.3", "III");
