@@ -30,10 +30,24 @@ public class RomanNumeralsController {
         }
 
         Map<String,String> map = new HashMap();
-        map.put("1", "I");
+        map.put("1.1", "I");
+        map.put("1.2", "II");
+        map.put("1.3", "III");
+        map.put("1.4", "IV");
         map.put("1.5", "V");
-        map.put("2", "X");
-//        map.put(50, "L");
+        map.put("1.6", "VI");
+        map.put("1.7", "VII");
+        map.put("1.8", "VIII");
+        map.put("1.9", "IX");
+        map.put("2.1", "X");
+        map.put("2.2", "XX");
+        map.put("2.3", "XXX");
+        map.put("2.4", "XL");
+        map.put("2.5", "L");
+        map.put("2.6", "LX");
+        map.put("2.7", "LXX");
+        map.put("2.8", "LXXX");
+        map.put("2.9", "XC");
         map.put("3.1", "C");
         map.put("3.2", "CC");
         map.put("3.3", "CCC");
@@ -43,7 +57,9 @@ public class RomanNumeralsController {
         map.put("3.7", "DCC");
         map.put("3.8", "DCCC");
         map.put("3.9", "CM");
-        map.put("4", "M");
+        map.put("4.1", "M");
+        map.put("4.2", "MM");
+        map.put("4.3", "MMM");
 
         int digit = 0;
         Stack<Integer> digits = new Stack();
@@ -53,13 +69,12 @@ public class RomanNumeralsController {
         }
 
         int index = digits.size();
+        String numeral = "";
         while(digits.size() > 0) {
             digit = digits.pop();
-            if(digit < 4) {
-
-            }
+            numeral += map.get(String.format("%d.%d", index, digit));
             --index;
         }
-        return "";
+        return numeral;
     }
 }
