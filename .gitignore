@@ -25,3 +25,8 @@ hs_err_pid*
 # IDE settings
 .idea
 RomanNumerals.iml
+
+# Properties
+src/main/resources/application.properties
+
+target
