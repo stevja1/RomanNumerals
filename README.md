@@ -52,7 +52,10 @@ Obtain a New Relic license key. When running the docker container, set the `NEW_
 
 New Relic logs are located in `monitoring/newrelic/logs/newrelic_agent.log`.
 
-## Dependency Attribution
+## Service Dependencies
+This service is self-contained and doesn't depend on any external databases or services.
+
+## Code Dependency Attribution
 Spring Initializr was used to stub out a basic web service.
 
 REST API Capability:
@@ -62,6 +65,7 @@ REST API Capability:
 
 Utilities:
 * Slf4J/Log4J for logging
+* Jackson for Serialization
 * Lombok for simplifying some code
 * Springfox's Swagger UI library to provide a swagger UI
 
@@ -71,19 +75,18 @@ For testing:
 
 For metrics tracking:
 * New Relic
-> NOTE: For a full list of dependencies, see the pom.xml.
 
 ## Monitoring and Alerting
-This project leans heavily on New Relic for monitoring and alerting. The following "golden signals" can be monitored almost exclusively with New Relic.
+This project leans heavily on New Relic for monitoring and alerting. The following "golden signals" can be monitored almost exclusively with New Relic. Alerts can be setup around these signals to alert someone via something like PagerDuty if there is an issue.
 
 ### Availability
-This project includes a health check that can be called by a New Relic synthetic. An alert can be built around that synthetic to use something like PagerDuty to page someone.
+This project includes a health check that can be called by a New Relic synthetic. An alert can be built around that synthetic.
 
 ### Responsiveness
-This project's New Relic configuration includes apdex tracking in APM. An alert can be setup around apdex to monitor application responsiveness.
+This project's New Relic configuration includes apdex tracking in APM. An alert can be setup and thresholds configured around apdex to monitor application responsiveness.
 
 ### Error Rate
-This project's New Relic configuration includes error rate tracking in APM. An alert can be setup around error rate. 
+This project's New Relic configuration includes error rate tracking in APM. An alert can be setup and thresholds configured around error rate. 
 
 ### Capacity
 Capacity monitoring can be accomplished in multiple ways:
@@ -91,7 +94,11 @@ Capacity monitoring can be accomplished in multiple ways:
 #### Thread Tracking
 Track and aggregate available container threads. Capacity can be reported as 'busy threads' / 'available threads'.
 
+This project has JMX enabled and thread metrics are captured by New Relic. Alerts can be setup and thresholds configured around the number of busy threads.
+
 #### CPU Utilization
-Since this project is CPU bound, CPU utilization could be tracked as well, but it isn't ideal because it isn't a direct indicator of capacity/saturation. In an environment like kubernetes, its easy to auto-scale based on cpu utilization. This ease of use may provide initial capacity management until something more mature can be put in place.
+Since this project is largely CPU bound, CPU utilization could be tracked as well, but it isn't ideal because it isn't a direct indicator of capacity/saturation.
+
+In an environment like kubernetes, its easy to auto-scale based on cpu utilization. This ease of use may provide initial capacity management until something more mature can be put in place.
 
 New Relic APM does track CPU utilization, but this can be misleading in a docker/kubernetes environment since CPU load in these environments is a reflection of the actual hardware and not the allocated resources for the individual node or container.

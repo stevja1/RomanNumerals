@@ -26,7 +26,4 @@ hs_err_pid*
 .idea
 RomanNumerals.iml
 
-# Properties
-src/main/resources/application.properties
-
 target
